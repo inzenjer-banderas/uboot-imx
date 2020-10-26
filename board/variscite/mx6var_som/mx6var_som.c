@@ -398,6 +398,8 @@ static iomux_v3_cfg_t const usdhc1_pads[] = {
 	IOMUX_PADS(PAD_SD1_DAT3__SD1_DATA3	| MUX_PAD_CTRL(USDHC_PAD_CTRL)),
 };
 
+// Pads are actually pins, iomux_pads syntax is PAD_<PAD_NAME>__<SIGNAL_NAME>
+// Names are from iMX 6 processor reference manual
 static iomux_v3_cfg_t const usdhc2_pads[] = {
 	IOMUX_PADS(PAD_SD2_CLK__SD2_CLK		| MUX_PAD_CTRL(USDHC_PAD_CTRL)),
 	IOMUX_PADS(PAD_SD2_CMD__SD2_CMD		| MUX_PAD_CTRL(USDHC_PAD_CTRL)),
@@ -408,6 +410,9 @@ static iomux_v3_cfg_t const usdhc2_pads[] = {
 };
 
 #ifndef CONFIG_SPL_BUILD
+
+// CD is card detect pin, on nEDGE board it is on SD card connector pin B, connected
+// to GPIO3[27]
 static iomux_v3_cfg_t const usdhc2_cd_pad[][1*2] = {
 	{
 		/* DART */
@@ -415,7 +420,7 @@ static iomux_v3_cfg_t const usdhc2_cd_pad[][1*2] = {
 	},
 	{
 		/* Non-DART */
-		IOMUX_PADS(PAD_KEY_COL4__GPIO4_IO14 | MUX_PAD_CTRL(NO_PAD_CTRL)),
+		IOMUX_PADS(PAD_EIM_D27__GPIO3_IO27 | MUX_PAD_CTRL(NO_PAD_CTRL)),
 	}
 };
 #endif
@@ -483,7 +488,7 @@ static int usdhc2_cd_gpio[] = {
 	/* DART */
 	IMX_GPIO_NR(1, 6),
 	/* Non-DART */
-	IMX_GPIO_NR(4, 14)
+	IMX_GPIO_NR(3, 27)
 };
 
 int board_mmc_getcd(struct mmc *mmc)
