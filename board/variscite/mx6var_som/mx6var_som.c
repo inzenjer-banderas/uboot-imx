@@ -173,6 +173,7 @@ int board_mmc_get_env_dev(int devno)
 		return -1;
 }
 
+#if !defined(CONFIG_SPL_BUILD) || defined(CONFIG_SPL_ENV_SUPPORT)
 static int check_env(char *var, char *val)
 {
 	char *read_val;
@@ -188,6 +189,7 @@ static int check_env(char *var, char *val)
 
 	return 0;
 }
+#endif
 
 #ifdef CONFIG_SPLASH_SCREEN
 static void set_splashsource_to_boot_rootfs(void)
@@ -253,6 +255,7 @@ int splash_screen_prepare(void)
 }
 #endif
 
+#ifndef CONFIG_SPL_BUILD
 static iomux_v3_cfg_t const usdhc1_gpio_pads[] = {
 	IOMUX_PADS(PAD_SD1_CLK__GPIO1_IO20	| MUX_PAD_CTRL(NO_PAD_CTRL)),
 	IOMUX_PADS(PAD_SD1_CMD__GPIO1_IO18	| MUX_PAD_CTRL(NO_PAD_CTRL)),
@@ -305,6 +308,7 @@ static void print_emmc_size(void)
 	puts("eMMC:  ");
 	print_size(mmc->capacity, "\n");
 }
+#endif
 
 /*
  * Returns DRAM size in MiB
@@ -623,6 +627,7 @@ int board_mmc_init(bd_t *bis)
 }
 #endif
 
+#ifndef CONFIG_SPL_BUILD
 #ifdef CONFIG_ENV_IS_IN_MMC
 static void mmc_late_init(void)
 {
@@ -640,6 +645,7 @@ static void mmc_late_init(void)
 	sprintf(cmd, "mmc dev %d", dev_no);
 	run_command(cmd, 0);
 }
+#endif
 #endif
 
 #ifdef CONFIG_NAND_MXS
@@ -1030,9 +1036,11 @@ static void setup_usb(void)
 int board_usb_phy_mode(int port)
 {
 	if (is_mx6_custom_board() && port == 0) {
+#if !defined(CONFIG_SPL_BUILD) || defined(CONFIG_SPL_ENV_SUPPORT)
 		if (check_env("usbmode", "host"))
 			return USB_INIT_HOST;
 		else
+#endif
 			return USB_INIT_DEVICE;
 	}
 	return usb_phy_mode(port);
@@ -1319,6 +1327,7 @@ int power_init_board(void)
 	return 0;
 }
 
+#ifndef CONFIG_SPL_BUILD
 int board_late_init(void)
 {
 #ifdef CONFIG_ENV_IS_IN_MMC
@@ -1446,6 +1455,7 @@ void board_recovery_setup(void)
 #endif /*CONFIG_ANDROID_RECOVERY*/
 
 #endif /*CONFIG_FSL_FASTBOOT*/
+#endif /*CONFIG_SPL_BUILD*/
 
 #ifdef CONFIG_SPL_BUILD
 #include <spl.h>
