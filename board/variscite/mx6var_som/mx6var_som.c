@@ -478,7 +478,7 @@ static void setup_local_i2c(void)
 
 static void setup_iomux_uart(void)
 {
-	// SETUP_IOMUX_PADS(uart1_pads);
+	SETUP_IOMUX_PADS(uart1_pads);
 	SETUP_IOMUX_PADS(uart3_pads);
 }
 
