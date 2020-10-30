@@ -335,6 +335,22 @@ static iomux_v3_cfg_t const uart3_pads[] = {
 	IOMUX_PADS(PAD_EIM_D25__UART3_RX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL)),
 };
 
+static iomux_v3_cfg_t const leds_pads[] = {
+	/* White LED */
+	IOMUX_PADS(PAD_GPIO_9__PWM1_OUT | MUX_PAD_CTRL(NO_PAD_CTRL)),
+	/* Red LED */
+	IOMUX_PADS(PAD_SD4_DAT6__GPIO2_IO14 | MUX_PAD_CTRL(NO_PAD_CTRL)),
+	/* Orange LED - Always ON */
+	/* IOMUX_PADS(PAD_SD4_DAT6__GPIO2_IO14 | MUX_PAD_CTRL(NO_PAD_CTRL)), */
+	/* Blue LED */
+	IOMUX_PADS(PAD_SD4_DAT1__PWM3_OUT | MUX_PAD_CTRL(NO_PAD_CTRL)),
+};
+
+static int const red_led_gpio[] = {
+	/* nano EDGE */
+	IMX_GPIO_NR(2, 14),
+};
+
 static iomux_v3_cfg_t const enet_pads1[] = {
 	IOMUX_PADS(PAD_ENET_MDIO__ENET_MDIO	| MUX_PAD_CTRL(ENET_PAD_CTRL)),
 	IOMUX_PADS(PAD_ENET_MDC__ENET_MDC	| MUX_PAD_CTRL(ENET_PAD_CTRL)),
@@ -480,6 +496,15 @@ static void setup_iomux_uart(void)
 {
 	SETUP_IOMUX_PADS(uart1_pads);
 	SETUP_IOMUX_PADS(uart3_pads);
+}
+
+static void setup_leds(void)
+{
+	printf("Setting up nEDGE status LEDs....\n");
+	SETUP_IOMUX_PADS(leds_pads);
+	gpio_request(red_led_gpio[0], "Red LED");
+	gpio_direction_output(red_led_gpio[0], 0);
+	printf("Status LEDs set up, only orange should be ON now\n");
 }
 
 #ifdef CONFIG_FSL_ESDHC
@@ -1086,6 +1111,7 @@ int board_early_init_f(void)
 
 int board_init(void)
 {
+	setup_leds();
 #if defined(CONFIG_VIDEO_IPUV3)
 	setup_display();
 #elif defined(CONFIG_IMX_HDMI)
