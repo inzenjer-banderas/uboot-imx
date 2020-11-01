@@ -511,6 +511,18 @@ static void setup_iomux_uart(void)
 
 static void setup_leds(void)
 {
+	printf("Enabling nEDGE HDMI....\n");
+
+	SETUP_IOMUX_PAD(PAD_EIM_D23__GPIO3_IO23 | MUX_PAD_CTRL(NO_PAD_CTRL));
+
+	gpio_request(IMX_GPIO_NR(3, 23), "HDMI enable");
+	gpio_direction_output(IMX_GPIO_NR(3, 23), 1);
+
+	printf("HDMI enabled\n");
+}
+
+static void setup_hdmi(void)
+{
 	printf("Setting up nEDGE status LEDs....\n");
 
 	SETUP_IOMUX_PADS(leds_pads);
@@ -1148,6 +1160,7 @@ int board_init(void)
 {
 	printf("board_init started HERE\n");
 	setup_leds();
+	setup_hdmi();
 #if defined(CONFIG_VIDEO_IPUV3)
 	setup_display();
 #elif defined(CONFIG_IMX_HDMI)
