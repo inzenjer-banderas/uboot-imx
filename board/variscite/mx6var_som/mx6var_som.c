@@ -1076,8 +1076,8 @@ static iomux_v3_cfg_t const usb_pads[][3*2] = {
 	{
 		/* nEDGE */
 		IOMUX_PADS(PAD_GPIO_1__USB_OTG_ID	| MUX_PAD_CTRL(OTG_ID_PAD_CTRL)),
-		IOMUX_PADS(PAD_KEY_COL4__GPIO4_IO14	| MUX_PAD_CTRL(NO_PAD_CTRL)),
-		IOMUX_PADS(PAD_EIM_D30__GPIO3_IO30	| MUX_PAD_CTRL(NO_PAD_CTRL)),
+		IOMUX_PADS(PAD_KEY_ROW4__GPIO4_IO15	| MUX_PAD_CTRL(NO_PAD_CTRL)), /* otg pwr */
+		IOMUX_PADS(PAD_EIM_D26__GPIO3_IO26	| MUX_PAD_CTRL(NO_PAD_CTRL)), /* host pwr */
 	}
 };
 
@@ -1112,8 +1112,10 @@ int board_usb_phy_mode(int port)
 int board_ehci_power(int port, int on)
 {
 	int board = get_board_indx();
-	if (board == MX6_CUSTOM_BOARD)
-		return 0; /* no power enable needed */
+	
+	printf("==== Inside board_ehci_power ====\n");
+	gpio_set_value(usb_h1_pwr_en_gpio[board], on);
+	gpio_set_value(usb_otg_pwr_en_gpio[board], on);
 
 	if (port > 1)
 		return -EINVAL;
@@ -1396,7 +1398,7 @@ int power_init_board(void)
 #ifndef CONFIG_SPL_BUILD
 int board_late_init(void)
 {
-	printf("Late init started HERE/n");
+	printf("Late init started HERE\n");
 #ifdef CONFIG_ENV_IS_IN_MMC
 	mmc_late_init();
 #endif
