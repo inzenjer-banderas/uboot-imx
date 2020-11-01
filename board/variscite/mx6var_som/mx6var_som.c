@@ -1130,7 +1130,7 @@ int board_ehci_power(int port, int on)
 
 int board_early_init_f(void)
 {
-	printf("board_early_init started HERE")
+	printf("board_early_init started HERE");
 	setup_iomux_uart();
 #ifdef CONFIG_SYS_I2C_MXC
 	setup_local_i2c();
@@ -1144,7 +1144,7 @@ int board_early_init_f(void)
 
 int board_init(void)
 {
-	printf("board_init started HERE")
+	printf("board_init started HERE");
 	setup_leds();
 #if defined(CONFIG_VIDEO_IPUV3)
 	setup_display();
