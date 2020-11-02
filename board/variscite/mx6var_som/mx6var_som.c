@@ -1104,8 +1104,8 @@ static void setup_usb(void)
 	SETUP_IOMUX_PADS(usb_pads[board]);
 	gpio_request(usb_otg_pwr_en_gpio[board], "USB OTG Power Enable");
 	gpio_request(usb_h1_pwr_en_gpio[board], "USB H1 Power Enable");
-	gpio_direction_output(usb_otg_pwr_en_gpio[board], 0);
-	gpio_direction_output(usb_h1_pwr_en_gpio[board], 0);
+	gpio_direction_output(usb_otg_pwr_en_gpio[board], 1);
+	gpio_direction_output(usb_h1_pwr_en_gpio[board], 1);
 }
 
 int board_usb_phy_mode(int port)
