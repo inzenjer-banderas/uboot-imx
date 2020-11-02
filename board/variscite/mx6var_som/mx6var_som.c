@@ -509,7 +509,7 @@ static void setup_iomux_uart(void)
 	SETUP_IOMUX_PADS(uart3_pads);
 }
 
-static void setup_leds(void)
+static void setup_hdmi_en(void)
 {
 	printf("Enabling nEDGE HDMI....\n");
 
@@ -521,7 +521,7 @@ static void setup_leds(void)
 	printf("HDMI enabled\n");
 }
 
-static void setup_hdmi(void)
+static void setup_leds(void)
 {
 	printf("Setting up nEDGE status LEDs....\n");
 
@@ -1160,7 +1160,7 @@ int board_init(void)
 {
 	printf("board_init started HERE\n");
 	setup_leds();
-	setup_hdmi();
+	setup_hdmi_en();
 #if defined(CONFIG_VIDEO_IPUV3)
 	setup_display();
 #elif defined(CONFIG_IMX_HDMI)
